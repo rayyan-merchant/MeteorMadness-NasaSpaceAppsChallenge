@@ -54,7 +54,7 @@ An all-in-one simulator that:
 4. Calculate Impact → See comprehensive results
 5. Plan Defense → Evaluate deflection strategies
 ```
-
+---
 
 ## 🛠️ Tech Stack
 
@@ -103,11 +103,11 @@ meteor-madness/
 ## 👥 Team
 
 ### Team Members
-- **Rayyan Merchant** - Team Owner (@rayyanmerchant)
-- **Rija Ali** (@rijaa.)
-- **Syed Ukkashah Ahmed Shah** https://github.com/syedukkashah
-- **Ibrahim Johar Farooqi** (@ibrahimjohar)
-- **Riya Bhart** (@riyabhart)
+- **Rayyan Merchant** - Team Owner [(myGitHub)](https://github.com/rayyan-merchant)
+- **Rija Ali** [(@rija)https://github.com/Srijaali]
+- **Syed Ukkashah Ahmed Shah** [(@ukkashah)https://github.com/syedukkashah]
+- **Ibrahim Johar Farooqi** [(@ibrahimjohar)](https://github.com/ibrahimjohar)
+- **Riya Bhart** [(@riyabhart)](https://github.com/RiyaBhart)
 
 
 **Challenge**: Meteor Madness
