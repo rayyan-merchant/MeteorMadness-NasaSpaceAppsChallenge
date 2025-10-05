@@ -329,12 +329,13 @@ Display Mission Analysis
 
 ---
 
-## 🚀 Installation
+## 🚀 Launching
 
 ### Prerequisites
 - Modern web browser (Chrome, Firefox, Safari, Edge)
 - Internet connection (for NASA API and CDN libraries)
 
+### To use the appliction, simply go to https://rayyan-merchant.github.io/MeteorMadness-NasaSpaceAppsChallenge/
 
 ## 📖 Usage Guide
 
@@ -431,22 +432,6 @@ M = 0.67 × log₁₀(E) - 5.87
 R = E^0.33 × 2.2 (km at 5 psi overpressure)
 ```
 ✓ **Based on**: Sachs scaling from nuclear weapons research
-
-### Limitations & Simplifications
-
-**Not Modeled:**
-- Atmospheric breakup (objects <50m often airburst)
-- Fragmentation during entry
-- Non-spherical asteroid shapes
-- Detailed orbital mechanics (only basic Δv = Δx/t)
-- Uncertainty ranges (all values deterministic)
-
-**Simplified:**
-- Terrain classification (6 types vs. infinite variety)
-- Tsunami physics (conditional logic vs. computational fluid dynamics)
-- Population distribution (uniform density vs. actual demographics)
-- Success probabilities (heuristic scores vs. Monte Carlo simulations)
-
 **Why These Choices?**
 Balance between educational value and computational complexity. The tool teaches correct intuitions (velocity matters more than size, early detection crucial) without requiring supercomputers.
 
