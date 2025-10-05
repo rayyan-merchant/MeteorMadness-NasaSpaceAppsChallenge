@@ -9,22 +9,6 @@ An interactive web-based asteroid impact simulator that combines **real NASA dat
 
 ---
 
-## 📋 Table of Contents
-
-- [Overview](#overview)
-- [Key Features](#key-features)
-- [User-Friendly Design](#user-friendly-design)
-- [Tech Stack](#tech-stack)
-- [Project Architecture](#project-architecture)
-- [How It Works](#how-it-works)
-- [Installation](#installation)
-- [Usage Guide](#usage-guide)
-- [Scientific Accuracy](#scientific-accuracy)
-- [Team](#team)
-- [Acknowledgments](#acknowledgments)
-
----
-
 ## 🎯 Overview
 
 **Meteor Madness** is an educational tool designed for the NASA Space Apps Challenge that helps users understand asteroid impact threats and planetary defense strategies. It transforms complex scientific data into an intuitive, interactive experience.
