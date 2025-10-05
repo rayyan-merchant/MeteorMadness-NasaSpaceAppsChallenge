@@ -104,8 +104,8 @@ meteor-madness/
 
 ### Team Members
 - **Rayyan Merchant** - Team Owner [(myGitHub)](https://github.com/rayyan-merchant)
-- **Rija Ali** [(@rija)https://github.com/Srijaali]
-- **Syed Ukkashah Ahmed Shah** [(@ukkashah)https://github.com/syedukkashah]
+- **Rija Ali**   [(@rija)](https://github.com/Srijaali)
+- **Syed Ukkashah Ahmed Shah** [(@ukkashah)](https://github.com/syedukkashah)
 - **Ibrahim Johar Farooqi** [(@ibrahimjohar)](https://github.com/ibrahimjohar)
 - **Riya Bhart** [(@riyabhart)](https://github.com/RiyaBhart)
 
