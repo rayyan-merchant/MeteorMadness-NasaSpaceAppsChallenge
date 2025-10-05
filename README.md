@@ -442,7 +442,7 @@ Balance between educational value and computational complexity. The tool teaches
 ### Team Members
 - **Rayyan Merchant** - Team Owner (@rayyanmerchant)
 - **Rija Ali** (@rijaa.)
-- **Syed Ukkashah Ahmed Shah** (@syedukkashah)
+- **Syed Ukkashah Ahmed Shah** https://github.com/syedukkashah
 - **Ibrahim Johar Farooqi** (@ibrahimjohar)
 - **Riya Bhart** (@riyabhart)
 
@@ -483,7 +483,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🔗 Links
 
-- **Live Demo**: [meteor-madness.example.com](#)
+- **Live Demo**: (https://rayyan-merchant.github.io/MeteorMadness-NasaSpaceAppsChallenge/)
 - **GitHub Repository**: [github.com/yourusername/meteor-madness](#)
 - **NASA Space Apps**: [spaceappschallenge.org](#)
 - **NASA NeoWs API**: [api.nasa.gov](https://api.nasa.gov)
