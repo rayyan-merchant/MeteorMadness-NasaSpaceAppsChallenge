@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meteor Madness - Asteroid Impact Simulator</title>
+    <link rel="stylesheet" href="app.css">
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+    <script>
+    // Fallback to cloudflare if jsdelivr fails
+    if (typeof THREE === 'undefined') {
+            document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"><\/script>');
+        }
+    </script>
+</head>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1>Meteor Madness: Asteroid Impact Simulator</h1>
+            <p>Interactive tool for modeling asteroid impact scenarios using real NASA data</p>
+        </header>
+
+        <div class="grid">
+            <!-- 3D Earth Visualization -->
+            <div class="panel visualization-panel">
+                <h2>3D Impact Visualization</h2>
+                <div id="earth-container" class="earth-container">
+                    <canvas id="earth-canvas"></canvas>
+                    <div class="controls-overlay">
+                        <div class="control-item">
+                            <label>Impact Latitude: <span id="lat-value">0</span>°</label>
+                            <input type="range" id="impact-lat" min="-90" max="90" value="0">
+                        </div>
+                        <div class="control-item">
+                            <label>Impact Longitude: <span id="lon-value">0</span>°</label>
+                            <input type="range" id="impact-lon" min="-180" max="180" value="0">
+                        </div>
+                        <button id="random-location-btn" class="btn btn-small btn-primary">Random Location</button>
+                    </div>
+                </div>
+                <div class="location-info">
+                    <strong>Impact Location:</strong>
+                    <div id="location-details">Select a location on the map</div>
+                </div>
+            </div>
+
+            <!-- Left Panel: NASA Data -->
+            <div class="panel">
+                <h2>Real Near-Earth Objects</h2>
+                
+                <div id="loading" class="loading">
+                    <div class="spinner"></div>
+                    <p>Fetching NASA NEO data...</p>
+                </div>
+
+                <div id="asteroid-list" class="asteroid-list"></div>
+                
+                <button id="refresh-btn" class="btn btn-primary">Refresh NASA Data</button>
+            </div>
+
+            <!-- Middle Panel: Impact Parameters -->
+            <div class="panel">
+                <h2>Impact Parameters</h2>
+                
+                <div class="controls">
+                    <div class="control-group">
+                        <label>Diameter: <span id="diameter-value">100</span>m</label>
+                        <input type="range" id="diameter" min="10" max="1000" value="100">
+                        <small>10m - 1000m</small>
+                    </div>
+
+                    <div class="control-group">
+                        <label>Velocity: <span id="velocity-value">20</span> km/s</label>
+                        <input type="range" id="velocity" min="5" max="70" value="20">
+                        <small>5 - 70 km/s (typical range)</small>
+                    </div>
+
+                    <div class="control-group">
+                        <label>Impact Angle: <span id="angle-value">45</span>°</label>
+                        <input type="range" id="angle" min="0" max="90" value="45">
+                        <small>0° (horizontal) - 90° (vertical)</small>
+                    </div>
+
+                    <div class="control-group">
+                        <label>Density: <span id="density-value">3000</span> kg/m³</label>
+                        <select id="density">
+                            <option value="2000">Ice/Comet (2000)</option>
+                            <option value="3000" selected>Stony (3000)</option>
+                            <option value="5000">Iron (5000)</option>
+                        </select>
+                    </div>
+
+                    <button id="calculate-btn" class="btn btn-danger">Calculate Impact Effects</button>
+                </div>
+            </div>
+
+            <!-- Right Panel: Results -->
+            <div class="panel">
+                <h2>Impact Predictions</h2>
+                
+                <div id="results-placeholder" class="results-placeholder">
+                    <div class="icon">⚠️</div>
+                    <p>Adjust parameters and click<br>"Calculate Impact Effects"</p>
+                </div>
+
+                <div id="results" class="results hidden">
+                    <div class="result-card energy">
+                        <div class="result-label">Impact Energy</div>
+                        <div class="result-value" id="megatons">0</div>
+                        <div class="result-unit">Megatons TNT</div>
+                        <div class="result-subtext" id="tnt-equivalent">0 tons TNT</div>
+                    </div>
+
+                    <div class="result-card crater">
+                        <div class="result-label">Crater Diameter</div>
+                        <div class="result-value" id="crater">0</div>
+                        <div class="result-unit">meters</div>
+                    </div>
+
+                    <div class="result-card seismic">
+                        <div class="result-label">Seismic Magnitude</div>
+                        <div class="result-value" id="magnitude">0</div>
+                        <div class="result-unit">Richter Scale</div>
+                    </div>
+
+                    <div class="result-card blast">
+                        <div class="result-label">Blast Radius</div>
+                        <div class="result-value" id="blast-radius">0</div>
+                        <div class="result-unit">kilometers</div>
+                    </div>
+
+                    <div class="result-card tsunami">
+                        <div class="result-label">Tsunami Risk</div>
+                        <div class="result-value" id="tsunami-risk">LOW</div>
+                    </div>
+
+                    <div class="scientific-note">
+                        <strong>Scientific Note:</strong>
+                        Calculations use standard impact physics formulas. Real impacts vary based on composition, terrain, and atmospheric effects.
+                    </div>
+                     <div id="advanced-effects" class="advanced-effects hidden">
+                    <div class="result-card terrain">
+                        <div class="result-label">Impact Location Type</div>
+                        <div class="result-value" id="terrain-name">-</div>
+                        <div class="result-subtext" id="terrain-desc">-</div>
+                    </div>
+                    
+                    <div class="result-card population">
+                        <div class="result-label">Estimated Casualties</div>
+                        <div class="result-value" id="casualties-total">0</div>
+                        <div class="result-unit">Direct + Indirect Deaths</div>
+                        <div class="result-subtext" id="casualties-breakdown">-</div>
+                        <div class="result-subtext" id="casualties-affected">-</div>
+                    </div>
+                    
+                    <div class="result-card atmospheric">
+                        <div class="result-label">Atmospheric Effects</div>
+                        <div class="result-value" id="dust-cloud">0 km³</div>
+                        <div class="result-unit">Dust Ejected</div>
+                        <div class="result-subtext" id="atmospheric-details">-</div>
+                    </div>
+                    
+                    <div class="result-card historical">
+                        <div class="result-label">Similar to</div>
+                        <div class="result-value" style="font-size: 1.2rem;" id="historical-name">-</div>
+                        <div class="result-unit" id="historical-energy">-</div>
+                        <div class="result-subtext" id="historical-details">-</div>
+                    </div>
+                    
+                    <div class="scientific-note" id="energy-comparison">
+                        <strong>Energy Comparison:</strong>
+                        <span id="comparison-text">-</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- End of container -->
+ 
+    <!-- Mitigation Strategies Panel - Full Width -->
+    <div class="mitigation-section">
+        <div class="panel mitigation-panel full-width">
+            <h2>🛡️ Deflection Strategies</h2>
+                
+                <div class="mitigation-grid">
+                    <!-- Strategy Selection -->
+                    <div class="strategy-selector">
+                        <h3>Choose Deflection Method</h3>
+                        <div class="strategy-cards">
+                            <div class="strategy-card" data-strategy="kinetic">
+                                <div class="strategy-icon">💥</div>
+                                <div class="strategy-name">Kinetic Impactor</div>
+                                <div class="strategy-desc">Spacecraft collision changes velocity</div>
+                            </div>
+                            <div class="strategy-card" data-strategy="gravity">
+                                <div class="strategy-icon">🛸</div>
+                                <div class="strategy-name">Gravity Tractor</div>
+                                <div class="strategy-desc">Gradual pull using gravity</div>
+                            </div>
+                            <div class="strategy-card" data-strategy="nuclear">
+                                <div class="strategy-icon">☢️</div>
+                                <div class="strategy-name">Nuclear Device</div>
+                                <div class="strategy-desc">Explosive force deflection</div>
+                            </div>
+                            <div class="strategy-card" data-strategy="laser">
+                                <div class="strategy-icon">⚡</div>
+                                <div class="strategy-name">Laser Ablation</div>
+                                <div class="strategy-desc">Vaporize surface material</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Warning Time -->
+                    <div class="warning-time-section">
+                        <h3>Warning Time</h3>
+                        <div class="control-group">
+                            <label>Years Until Impact: <span id="warning-years-value">5</span></label>
+                            <input type="range" id="warning-years" min="0.5" max="20" step="0.5" value="5">
+                            <small>0.5 - 20 years</small>
+                        </div>
+                        <div class="timeline-visual" id="timeline-visual">
+                            <div class="timeline-bar">
+                                <div class="timeline-progress" id="timeline-progress"></div>
+                                <div class="timeline-marker" id="timeline-marker">
+                                    <span>Mission Launch</span>
+                                </div>
+                            </div>
+                            <div class="timeline-labels">
+                                <span>Now</span>
+                                <span id="impact-date">Impact</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Deflection Results -->
+                    <div class="deflection-results">
+                        <h3>Mission Analysis</h3>
+                        <div id="deflection-placeholder" class="deflection-placeholder">
+                            <p>Select a deflection strategy and calculate impact effects first</p>
+                        </div>
+                        <div id="deflection-output" class="deflection-output hidden">
+                            <div class="result-row">
+                                <span class="label">Success Probability:</span>
+                                <span class="value" id="success-prob">0%</span>
+                            </div>
+                            <div class="result-row">
+                                <span class="label">Velocity Change Needed:</span>
+                                <span class="value" id="delta-v">0 m/s</span>
+                            </div>
+                            <div class="result-row">
+                                <span class="label">Mission Duration:</span>
+                                <span class="value" id="mission-duration">0 years</span>
+                            </div>
+                            <div class="result-row">
+                                <span class="label">Estimated Cost:</span>
+                                <span class="value" id="mission-cost">$0B</span>
+                            </div>
+                            <div class="result-row">
+                                <span class="label">Technology Status:</span>
+                                <span class="value" id="tech-status">Unknown</span>
+                            </div>
+                            <div class="feasibility-indicator">
+                                <div class="feasibility-bar">
+                                    <div class="feasibility-fill" id="feasibility-fill"></div>
+                                </div>
+                                <div class="feasibility-label" id="feasibility-label">Calculating...</div>
+                            </div>
+                            <div class="mission-notes" id="mission-notes"></div>
+                        </div>
+                        <button id="calculate-deflection-btn" class="btn btn-primary">Calculate Deflection Mission</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======================= Team Info ======================= -->
+    <footer class="footer">
+    <div class="footer-content">
+        
+        <div class="footer-section team-members">
+        <h2>Team Members</h2>
+        <ul class="team-list">
+            <li>
+            <strong>Team Owner</strong><br>
+            <span class="name">Rayyan Merchant</span><br>
+            <span class="handle">@rayyanmerchant</span><br>
+            <span class="location">Pakistan</span>
+            </li>
+            <li>
+            <span class="name">Rija Ali</span><br>
+            <span class="handle">@rijaa.</span><br>
+            <span class="location">Pakistan</span>
+            </li>
+            <li>
+            <span class="name">Syed Ukkashah Ahmed Shah</span><br>
+            <span class="handle">@syedukkashah</span><br>
+            <span class="location">Pakistan</span>
+            </li>
+            <li>
+            <span class="name">Ibrahim Johar Farooqi</span><br>
+            <span class="handle">@ibrahimjohar</span><br>
+            <span class="location">Pakistan</span>
+            </li>
+            <li>
+            <span class="name">Riya Bhart</span><br>
+            <span class="handle">@riyabhart</span><br>
+            <span class="location">Pakistan</span>
+            </li>
+        </ul>
+        </div>
+
+        <div class="footer-section about-team">
+        <h2>About the Team</h2>
+        <p>
+            Passionate about exploring space data, uncovering patterns, and turning them into creative, impactful solutions.
+        </p>
+        <p class="subtext">
+            <strong>A little about us:</strong><br>
+            • Backgrounds in AI, data science, and software development<br>
+            • Skilled in Python, machine learning, data visualization, and backend/frontend development<br>
+            • Interested in applying space + data to solve real-world challenges<br>
+            • We enjoy working in a collaborative, curious, and fun environment<br>
+            • We’re motivated, diverse in skills, and eager to build something innovative yet practical for this hackathon.<br><br>
+            If you’re excited about space data, creative problem-solving, and building something that stands out, you’ll fit right in with us.
+        </p>
+        </div>
+
+        <div class="footer-section about-challenge">
+        <h2>About the Challenge</h2>
+        <p>
+            A newly identified near-Earth asteroid, <strong>“Impactor-2025”</strong>, poses a potential threat to Earth — but do we have the tools to enable the public and decision makers to understand and mitigate its risks?
+        </p>
+        <p class="subtext">
+            NASA datasets include information about known asteroids and the United States Geological Survey provides critical information that could enable modeling the effects of asteroid impacts, but this data needs to be integrated to enable effective visualization and decision making.
+        </p>
+        <p class="subtext">
+            Your challenge is to develop an interactive visualization and simulation tool that uses real data to help users model asteroid impact scenarios, predict consequences, and evaluate potential mitigation strategies. 
+            <br><em>(Planetary Science Division)</em>
+        </p>
+        </div>
+
+        <div class="footer-section team-info">
+        <h2>Team Information</h2>
+        <p>
+            <strong>Local Event:</strong> Karachi, Pakistan<br>
+            <strong>Challenge:</strong> Meteor Madness
+        </p>
+        </div>
+    </div>
+
+    <div class="footer-bottom">
+        <p>© 2025 Team Meteor Madness — Built for NASA Space Apps Challenge 🌍</p>
+    </div>
+    </footer>
+    <script src="config.js"></script>
+    <script src="earth_visual.js"></script>
+    <script src="deflection_calc.js"></script>
+    <script src="adv_effects.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
