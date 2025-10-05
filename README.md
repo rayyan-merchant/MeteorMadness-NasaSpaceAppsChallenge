@@ -484,7 +484,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 🔗 Links
 
 - **Live Demo**: (https://rayyan-merchant.github.io/MeteorMadness-NasaSpaceAppsChallenge/)
-- **GitHub Repository**: [github.com/yourusername/meteor-madness](#)
+- **GitHub Repository**: https://github.com/rayyan-merchant/MeteorMadness-NasaSpaceAppsChallenge/tree/main
 - **NASA Space Apps**: [spaceappschallenge.org](#)
 - **NASA NeoWs API**: [api.nasa.gov](https://api.nasa.gov)
 ---
