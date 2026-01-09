@@ -141,6 +141,6 @@ meteor-madness/
 
 ---
 
-**Built with 🚀 for NASA Space Apps Challenge 2025**
+**Built for NASA Space Apps Challenge 2025**
 
 *Making asteroid impact science accessible to everyone.*
